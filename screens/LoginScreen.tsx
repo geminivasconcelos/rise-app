@@ -1,56 +1,55 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../App";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { FloatingInput } from "../components/FloatingInput";
+import { useState } from "react";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+export type RootStackParamList = {
+  Login: undefined;
+  Signup: undefined;
+};
 
-export default function LoginScreen({ navigation }: Readonly<Props>) {
+type Props = {
+  readonly navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
+};
+
+export default function LoginScreen({ navigation }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    // Aqui você colocaria a validação real
-    if (!email || !password) {
-      Alert.alert("Erro", "Preencha todos os campos");
-      return;
-    }
-
-    // Simulando login bem-sucedido
-    navigation.replace("Dashboard");
-  };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Rise</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
+      <Text style={styles.appName}>rise</Text>
+
+      <View style={styles.containerTitle}>
+        <Text style={styles.title}>Login to your Account</Text>
+      </View>
+
+      <View style={styles.containerInputs}>
+        <FloatingInput label="Email" value={email} onChangeText={setEmail} />
+        <FloatingInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.push("Signup")}>
-        <Text style={styles.linkText}>Não tem conta? Cadastre-se</Text>
+      <Text style={styles.orLogin}>- or sign in with -</Text>
+
+      <Image
+        source={require("../assets/icons/google-logo-48.png")}
+        style={styles.iconeGoogle}
+      />
+
+      <TouchableOpacity
+        style={styles.link}
+        onPress={() => navigation.navigate("Signup")}
+      >
+        <Text style={styles.linkMsg}>
+          Don’t have an account? <Text style={styles.linkBold}>Sign up</Text>
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,33 +58,78 @@ export default function LoginScreen({ navigation }: Readonly<Props>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 24,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
-    backgroundColor: "#fff",
+  },
+  appName: {
+    fontFamily: "Nunito_900Black",
+    fontSize: 32,
+    fontWeight: "700",
+    color: "#243B9A",
+    marginBottom: 64,
+    textAlign: "center",
+  },
+  containerTitle: {
+    width: "95%",
+    paddingLeft: 16,
+    marginBottom: 8,
   },
   title: {
-    fontSize: 48,
-    fontWeight: "bold",
-    color: "#4B7BEC",
-    marginBottom: 40,
+    fontFamily: "Nunito_400Regular",
+    fontSize: 15,
+    marginBottom: 24,
+    textAlign: "left",
+    color: "#cacaca",
   },
-  input: {
+  containerInputs: {
     width: "100%",
-    padding: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    marginBottom: 15,
+    alignItems: "center",
+    gap: 20,
   },
   button: {
-    width: "100%",
-    padding: 15,
-    backgroundColor: "#4B7BEC",
-    borderRadius: 10,
+    width: "80%",
+    height: 52,
+    backgroundColor: "#092fc8",
+    borderRadius: 7,
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15,
+    marginTop: 8,
+    elevation: 10,
   },
-  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  linkText: { color: "#4B7BEC", fontWeight: "bold" },
+  buttonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: "Nunito_400Regular",
+  },
+  link: {
+    position: "absolute",
+    bottom: 40,
+    fontSize: 14,
+    textAlign: "center",
+    color: "#f0f1f1",
+    marginTop: 24,
+  },
+  linkMsg: {
+    fontFamily: "Nunito_400Regular",
+    fontSize: 14,
+    color: "#9f9fa1",
+  },
+  linkBold: {
+    color: "#213caa",
+    fontFamily: "Nunito_700Bold",
+  },
+  orLogin: {
+    marginTop: 50,
+    textAlign: "center",
+    color: "#a4a8b1",
+    fontFamily: "Nunito_500Medium",
+  },
+  iconeGoogle: {
+    marginTop: 44,
+    width: 32,
+    height: 32,
+  },
 });
