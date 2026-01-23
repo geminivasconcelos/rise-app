@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FloatingInput } from "../components/FloatingInput";
+import { FloatingInput } from "../../components/FloatingInput";
 import { useState } from "react";
+import AppAlert from "../../components/AppAlert";
 
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
+  Dashboard: undefined;
 };
 
 type Props = {
@@ -15,6 +17,27 @@ type Props = {
 export default function LoginScreen({ navigation }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleLogin = () => {
+    if (!email || !password) {
+      setAlertMessage("Preencha email e senha.");
+      setAlertVisible(true);
+      return;
+    }
+
+    // simulação de erro
+    if (password !== "123456") {
+      setAlertMessage("Senha incorreta.");
+      setAlertVisible(true);
+      return;
+    }
+
+    navigation.navigate("Dashboard");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.appName}>rise</Text>
@@ -32,7 +55,10 @@ export default function LoginScreen({ navigation }: Props) {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+      >
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
 
@@ -51,6 +77,13 @@ export default function LoginScreen({ navigation }: Props) {
           Don’t have an account? <Text style={styles.linkBold}>Sign up</Text>
         </Text>
       </TouchableOpacity>
+
+        <AppAlert
+        visible={alertVisible}
+        message={alertMessage}
+        type="error"
+        onClose={() => setAlertVisible(false)}
+      />
     </View>
   );
 }
@@ -91,8 +124,9 @@ const styles = StyleSheet.create({
   button: {
     width: "80%",
     height: 52,
+    // backgroundColor: "#0a153f",
     backgroundColor: "#092fc8",
-    borderRadius: 7,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 8,

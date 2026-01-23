@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FloatingInput } from "../components/FloatingInput";
+import { FloatingInput } from "../../components/FloatingInput";
 
 export type RootStackParamList = {
   Login: undefined;
